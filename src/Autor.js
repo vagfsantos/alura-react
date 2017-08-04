@@ -35,6 +35,11 @@ class FormularioAutor extends Component{
             }),
             success: novaListagem => {
                 PubSub.publish('atualiza-lista-autores', novaListagem);
+                this.setState({
+                    nome:'',
+                    email:'',
+                    senha:''
+                });
             },
             error: error => {
                 console.log(error)
@@ -42,6 +47,10 @@ class FormularioAutor extends Component{
                 if( error.status === 400 ) {
                     new TratadorErrors().publicaErros(error.responseJSON);
                 }
+            },
+            
+            beforeSend: () => {
+                PubSub.publish('limpa-erros');
             }
         });
     }
